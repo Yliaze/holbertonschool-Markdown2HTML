@@ -5,6 +5,7 @@ First argument is the name of the Markdown file
 Second argument is the output file name"""
 import sys
 import os
+import re
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -16,4 +17,28 @@ if __name__ == "__main__":
         """Error sys.argv[1] doesn't exist"""
         print(f"Missing {sys.argv[1]}", file=sys.stderr)
         exit(1)
+    
+    markdown_file = sys.argv[1]
+    html_file = sys.argv[2]
 
+    with open(markdown_file, 'r', encoding='UTF-8') as file:
+        all_lines = file.readlines()
+
+        output_lines = []
+        
+        for lines in all_lines:
+            if lines.startswith('#'):
+                """Count number of #"""
+                count = lines.count('#')
+                """Suppr space and # from text"""
+                text = lines[count:].strip()
+                """Format text"""
+                html_title = f'<h{count}>{text}</h{count}>\n'
+                output_lines.append(html_title)
+            else:
+                output_lines.append(lines)
+    
+    with open(html_file, 'w') as output_file:
+        output_file.writelines(output_lines)
+
+exit(0)
