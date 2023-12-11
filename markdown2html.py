@@ -5,7 +5,6 @@ First argument is the name of the Markdown file
 Second argument is the output file name"""
 import sys
 import os
-import re
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -21,6 +20,7 @@ if __name__ == "__main__":
     markdown_file = sys.argv[1]
     html_file = sys.argv[2]
 
+    """Open the markdown file"""
     with open(markdown_file, 'r', encoding='UTF-8') as file:
         all_lines = file.readlines()
 
@@ -35,9 +35,8 @@ if __name__ == "__main__":
                 """Format text"""
                 html_title = f'<h{count}>{text}</h{count}>\n'
                 output_lines.append(html_title)
-            else:
-                output_lines.append(lines)
     
+    """write in the html file"""
     with open(html_file, 'w') as output_file:
         output_file.writelines(output_lines)
 
