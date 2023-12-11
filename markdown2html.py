@@ -9,9 +9,12 @@ import sys
 import os
 
 if len(sys.argv) < 3:
+    """Error if (sys.argv) < 3"""
     print("Usage: ./markdown2html.py README.md README.html", file=sys.stderr)
     exit(1)
 
 if not os.path.exists(sys.argv[1]):
+    """Error sys.argv[1] doesn't exist"""
     print(f"Missing {sys.argv[1]}", file=sys.stderr)
     exit(1)
+
