@@ -69,6 +69,7 @@ if __name__ == "__main__":
                         in_ord_list = True
                     tohtml.write(f"<li>{line.lstrip('*').strip()}</li>\n")
                 
+                # List start with \n
                 elif not line.startswith('\n'):
                     if not in_p:
                         tohtml.write("<p>\n")
