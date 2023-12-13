@@ -27,33 +27,52 @@ if __name__ == "__main__":
         with open(readhtml, 'w', encoding='utf-8') as tohtml:
             in_list = False
             in_ord_list = False
+            in_p = False
 
+            # Browse each line
             for line in lines:
-                if line.startswith('-'):
+
+                # Closes tags if still open
+                if in_list and not line.startswith("-"):
+                    tohtml.write("</ul>\n")
+                    in_list = False
+                if in_ord_list and not line.startswith("*"):
+                    tohtml.write("</ol>\n")
+                    in_ord_list = False
+                if in_p and (line.startswith("-") or line.startswith("*") or
+                               line.startswith("#") or line.startswith("\n")):
+                    tohtml.write("</p>\n")
+                    in_p = False
+
+                # Start with #
+                if line.startswith('#'):
+                    # Count number of #
+                    count = 0
+                    for char in line:
+                        if char == '#':
+                            count += 1
+                    # Write headings with right number
+                    if count > 0:
+                        tohtml.write(f"<h{count}>{line.strip('#').strip()}</h{count}>\n")
+
+                # List start with -
+                elif line.startswith('-'):
                     if not in_list:
                         tohtml.write("<ul>\n")
                         in_list = True
                     tohtml.write(f"<li>{line.lstrip('-').strip()}</li>\n")
+
+                # List start with *    
                 elif line.startswith('*'):
                     if not in_ord_list:
                         tohtml.write("<ol>\n")
                         in_ord_list = True
                     tohtml.write(f"<li>{line.lstrip('*').strip()}</li>\n")
-                else:
-                    if in_list:
-                        tohtml.write("</ul>\n")
-                        in_list = False
-                    if in_ord_list:
-                        tohtml.write("</ol>\n")
-                        in_ord_list = False
-                    count = 0
-                    for char in line:
-                        if char == '#':
-                            count += 1
-                    if count > 0:
-                        tohtml.write(f"<h{count}>{line.strip('#').strip()}</h{count}>\n")
-
-            if in_list:
-                tohtml.write("</ul>\n")
-            if in_ord_list:
-                tohtml.write("</ol>\n")
+                
+                elif not line.startswith('\n'):
+                    if not in_p:
+                        tohtml.write("<p>\n")
+                        in_p = True
+                    else:
+                        tohtml.write("<br />\n")
+                    tohtml.write(f"{line.strip()}\n")
