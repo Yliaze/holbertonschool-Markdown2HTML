@@ -37,15 +37,18 @@ if __name__ == "__main__":
                 line = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', line)
                 # Search __ __ in line and replace by <em> </em>
                 line = re.sub(r'__(.*?)__', r'<em>\1</em>', line)
+
                 # Search (( )) in line and remove all c
                 if re.search(r'\(\((.*?)\)\)', line):
-                    line = re.sub(r'c', r'', line, flags=re.IGNORECASE)
+                    match = re.search(r'\(\((.*?)\)\)', line)
+                    c_content = match.group(1).replace('c', '')
+                    line = re.sub(r'\(\((.*?)\)\)', c_content, line, flags=re.IGNORECASE)
                 line = re.sub(r'\(\(|\)\)', r'', line)
+
                 # Search [[ ]] in line and convert in MD5
                 if re.search(r'\[\[(.*?)\]\]', line):
                     match = re.search(r'\[\[(.*?)\]\]', line)
                     content = match.group(1)
-                    print(content)
                     hashlib_content = hashlib.md5(content.encode()).hexdigest()
                     line = re.sub(content, hashlib_content, line)
                 line = re.sub(r'\[\[|\]\]', r'', line)
