@@ -40,9 +40,11 @@ if __name__ == "__main__":
 
                 # Search (( )) in line and remove all c
                 if re.search(r'\(\((.*?)\)\)', line):
+                    # Search (( )) in line and remove all c
                     match = re.search(r'\(\((.*?)\)\)', line)
-                    c_content = match.group(1).replace('c', '')
-                    line = re.sub(r'\(\((.*?)\)\)', c_content, line, flags=re.IGNORECASE)
+                    without_c = match.group(1)
+                    line_without_c = re.sub(r'c', r'', without_c, flags=re.IGNORECASE)
+                    line = re.sub(without_c, line_without_c, line, flags=re.IGNORECASE)
                 line = re.sub(r'\(\(|\)\)', r'', line)
 
                 # Search [[ ]] in line and convert in MD5
