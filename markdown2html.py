@@ -4,6 +4,7 @@
 
 import sys
 import os
+import re
 
 if __name__ == "__main__":
     if len(sys.argv) < 3:
@@ -31,6 +32,10 @@ if __name__ == "__main__":
 
             # Browse each line
             for line in lines:
+                # Search ** ** and replace by <b> </b>
+                line = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', line)
+                # Search __ __ and replace by <em> </em>
+                line = re.sub(r'__(.*?)__', r'<em>\1</em>', line)
 
                 # Closes tags if still open
                 if in_list and not line.startswith("-"):
